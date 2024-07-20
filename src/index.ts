@@ -4,16 +4,14 @@ import { logger } from 'hono/logger';
 import { timeout } from 'hono/timeout';
 import { jwt } from 'hono/jwt';
 import type { JwtVariables } from 'hono/jwt';
+import routes from './routes';
+import { errorHandler } from './middleware/error.middleware';
 
 type Variables = JwtVariables;
-// local import
-import routes from "./routes";
-import { HTTPException } from 'hono/http-exception';
-import { errorHandler } from './middleware/error.middleware';
 
 const app = new Hono<{ Variables: Variables; }>();
 
-// middleware
+// Middleware
 app.use(logger());
 app.use('/api', timeout(5000));
 app.use(
@@ -35,13 +33,11 @@ app.use(
   })
 );
 
-
-
 app.get('/', (c) => {
   return c.text('Hello Hono!');
 });
 
-app.route('/api/', routes);
+app.route('/api', routes); // Ensure routes are correct and match
 
 app.onError(errorHandler);
 

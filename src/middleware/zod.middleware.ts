@@ -13,7 +13,11 @@ export const validate = (schema: ZodSchema) => {
       if (error instanceof SyntaxError) {
         return c.json({ error: 'Invalid JSON format' }, 400);
       } else if (error instanceof ZodError) {
-        return c.json({ error: 'Validation failed', details: error.errors.map(({ message }) => ({ message })) }, 400);
+        return c.json({
+          error: 'Validation failed', details: error.errors.map(({ message, path, ...a }) => {
+            return ({ message, path });
+          })
+        }, 400);
       } else {
         return c.json({ error: 'Server error' }, 500);
       }
