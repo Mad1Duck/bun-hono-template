@@ -1,0 +1,147 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model App_Users {
+  id                 String                @id @default(uuid())
+  username           String                @unique
+  first_name         String?
+  last_name          String?
+  phone              String?
+  email              String                @unique
+  password           String
+  role_id            String                @db.Uuid
+  birth_date         DateTime?
+  created_at         DateTime              @default(now())
+  updated_at         DateTime              @default(now()) @updatedAt
+  emailConfirmations Email_Confirmations[]
+  phoneConfirmations Phone_Confirmations[]
+  roles              Roles                 @relation(fields: [role_id], references: [id])
+  services           Service_Name[]
+  total_earnings     Float                 @default(0) // Total earnings for the app owner
+  allowance_balance  Float                 @default(0) // Balance available for withdrawal
+}
+
+model Roles {
+  id          String      @id @default(uuid()) @db.Uuid
+  name        RoleName    @unique
+  description String?
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @default(now()) @updatedAt
+  app_users   App_Users[]
+}
+
+model Email_Confirmations {
+  id                String   @id @default(uuid())
+  app_user_id       String
+  confirmation_code String   @unique
+  is_confirmed      Boolean  @default(false)
+  created_at        DateTime @default(now())
+  updated_at        DateTime @default(now()) @updatedAt
+
+  app_user App_Users @relation(fields: [app_user_id], references: [id])
+}
+
+model Phone_Confirmations {
+  id          String   @id @default(uuid())
+  app_user_id String
+  otp_code    String
+  is_verified Boolean  @default(false)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now()) @updatedAt
+
+  app_user App_Users @relation(fields: [app_user_id], references: [id])
+}
+
+model Service_Name {
+  id                String               @id @default(uuid())
+  owner_id          String
+  name              String               @unique
+  description       String?
+  endpoint          String
+  created_at        DateTime             @default(now())
+  updated_at        DateTime             @default(now()) @updatedAt
+  owner             App_Users            @relation(fields: [owner_id], references: [id])
+  subscriptionPlans Subscription_Plans[]
+  Customers         Customers[]
+  Revenue_Share     Revenue_Share[]
+}
+
+model Subscription_Plans {
+  id            String   @id @default(uuid())
+  service_id    String
+  name          String
+  price         Float
+  billing_cycle String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @default(now()) @updatedAt
+
+  service      Service_Name             @relation(fields: [service_id], references: [id])
+  customerSubs Customer_Subscriptions[]
+}
+
+model Customer_Subscriptions {
+  id                   String    @id @default(uuid())
+  customer_id          String
+  subscription_plan_id String
+  start_date           DateTime  @default(now())
+  end_date             DateTime?
+  status               String    @default("active")
+  created_at           DateTime  @default(now())
+  updated_at           DateTime  @default(now()) @updatedAt
+
+  customer         Customers          @relation(fields: [customer_id], references: [id])
+  subscriptionPlan Subscription_Plans @relation(fields: [subscription_plan_id], references: [id])
+  payments         Payments[]
+}
+
+model Payments {
+  id                       String   @id @default(uuid())
+  customer_subscription_id String
+  amount                   Float
+  payment_date             DateTime @default(now())
+  payment_method           String?
+  transaction_id           String?  @unique
+
+  customerSubscription Customer_Subscriptions @relation(fields: [customer_subscription_id], references: [id])
+}
+
+model Customers {
+  id           String                   @id @default(uuid())
+  app_id       String
+  external_id  String // ID used in the owner's system
+  name         String
+  email        String
+  phone        String
+  created_at   DateTime                 @default(now())
+  updated_at   DateTime                 @default(now()) @updatedAt
+  customerSubs Customer_Subscriptions[]
+
+  app Service_Name @relation(fields: [app_id], references: [id])
+}
+
+model Revenue_Share {
+  id             String   @id @default(uuid())
+  service_id     String
+  start_date     DateTime // Start date of the revenue share period
+  end_date       DateTime // End date of the revenue share period
+  total_revenue  Float // Total revenue for the period
+  owner_share    Float // Share for the app owner (e.g., 90%)
+  provider_share Float // Share for you (e.g., 10%)
+  collected      Boolean  @default(false) // Indicates if this revenue has been collected
+  created_at     DateTime @default(now())
+  updated_at     DateTime @default(now()) @updatedAt
+
+  serviceName Service_Name @relation(fields: [service_id], references: [id])
+}
+
+enum RoleName {
+  APP_OWNER
+  ADMINISTRATOR
+  USER
+}
