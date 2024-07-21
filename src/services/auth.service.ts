@@ -28,8 +28,11 @@ export const getUser = async ({ email, phone }: { email: string, phone: string; 
       ]
     },
     include: {
-      roles: true,
-      services: true
+      roles: {
+        select: {
+          name: true
+        }
+      },
     }
   });
 };

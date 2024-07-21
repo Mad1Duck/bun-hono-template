@@ -6,13 +6,15 @@ import { bcryptVerify } from "../utils/hashing";
 import ApiError from "../utils/ApiError";
 import * as HttpStatus from "http-status";
 import { generateToken } from "../utils/jwt";
+import { findRole } from "../services/role.service";
 
 // owner
 export const register = catchAsync(async (c) => {
-  const { email, firstName, lastName, password, phone }: registerSchemaType = await c.req.parseBody();
+  const { email, firstName, lastName, password, phone, username }: registerSchemaType = await c.req.parseBody();
+  const role = await findRole({ name: "APP_OWNER" });
 
   const result = await createUser({
-    email, first_name: firstName, last_name: lastName, password, phone
+    email, first_name: firstName, last_name: lastName, password, phone, role_id: role?.id, username: username
   });
   return c.json({ result });
 });
@@ -27,9 +29,9 @@ export const login = catchAsync(async (c) => {
   } else {
     const verifiedPassword = await bcryptVerify(password, findUser.password);
     if (verifiedPassword) {
-      const { id, email, first_name, last_name } = findUser;
+      const { id, email, first_name, last_name, roles } = findUser;
       const token = await generateToken({ email, id });
-      return c.json({ first_name, last_name, email, authoritation: { token: token } });
+      return c.json({ first_name, last_name, email, roles, authoritation: { token: token } });
     }
     throw new ApiError(HttpStatus.UNAUTHORIZED, { message: "unauthorize" });
   }
