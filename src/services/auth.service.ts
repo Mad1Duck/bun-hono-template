@@ -55,6 +55,9 @@ export const getUserById = async (data: UserTypes) => {
   return prisma.app_Users.findFirst({
     where: {
       id: data.id!
+    },
+    include: {
+      roles: true
     }
   });
 };

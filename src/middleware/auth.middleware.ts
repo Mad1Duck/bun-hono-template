@@ -12,13 +12,24 @@ export const authenticationStoreOwner = catchAsync(async (c, next) => {
   return await next();
 });
 
-export const authenticationAppAdmin = catchAsync(async (c, next) => {
+export const authenticationAppOwner = catchAsync(async (c, next) => {
   const { id } = c.get("jwtPayload");
   const findUser = await getUserById({ id });
 
-  if (isEmpty(findUser)) {
-    throw new ApiError(HttpStatus.UNAUTHORIZED, { message: "unauthorize" });
-  } else {
+  if (!isEmpty(findUser) && findUser.roles.name === "APP_OWNER") {
     return await next();
+  } else {
+    throw new ApiError(HttpStatus.UNAUTHORIZED, { message: "unauthorize" });
+  }
+});
+
+export const authenticationAdministrator = catchAsync(async (c, next) => {
+  const { id } = c.get("jwtPayload");
+  const findUser = await getUserById({ id });
+
+  if (!isEmpty(findUser) && findUser.roles.name === "ADMINISTRATOR") {
+    return await next();
+  } else {
+    throw new ApiError(HttpStatus.UNAUTHORIZED, { message: "unauthorize" });
   }
 });
