@@ -26,6 +26,10 @@ export const getUser = async ({ email, phone }: { email: string, phone: string; 
         { email: { equals: email.toLowerCase() } },
         { phone: await transformPhoneNumber(phone) }
       ]
+    },
+    include: {
+      roles: true,
+      services: true
     }
   });
 };
