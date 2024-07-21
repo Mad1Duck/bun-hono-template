@@ -1,4 +1,4 @@
-import { createApp, findApps } from "../../../services/app.service";
+import { createApp, findApps, updateApp } from "../../../services/app.service";
 import { catchAsync } from "../../../utils/catchAsync";
 import { appSchemaType } from "../../../utils/validator/app.validator";
 
@@ -10,6 +10,16 @@ export const createAppController = catchAsync(async (c) => {
 
   return c.json({ result: app });
 });
+
+export const updateAppController = catchAsync(async (c) => {
+  const { description, name }: appSchemaType = await c.req.parseBody();
+  const { id } = await c.req.param();
+  const { id: ownerId } = c.get("jwtPayload");
+  const app = await updateApp({ id, name, description, owner_id: ownerId });
+
+  return c.json({ result: app });
+});
+
 
 export const getAppsController = catchAsync(async (c) => {
   const { id: ownerId } = c.get("jwtPayload");

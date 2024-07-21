@@ -16,7 +16,8 @@ export const createApp = (data: AppsTypes) => {
 export const updateApp = (data: AppsTypes) => {
   return prisma.apps.update({
     where: {
-      id: data?.id!
+      id: data?.id!,
+      owner_id: data?.owner_id
     },
     data: {
       name: data.name?.toUpperCase()!,
