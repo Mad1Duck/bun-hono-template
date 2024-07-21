@@ -143,5 +143,4 @@ model Revenue_Share {
 enum RoleName {
   APP_OWNER
   ADMINISTRATOR
-  USER
 }
