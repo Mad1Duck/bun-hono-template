@@ -22,7 +22,7 @@ model App_Users {
   emailConfirmations Email_Confirmations[]
   phoneConfirmations Phone_Confirmations[]
   roles              Roles                 @relation(fields: [role_id], references: [id])
-  services           Service_Name[]
+  apps               Apps[]
   total_earnings     Float                 @default(0) // Total earnings for the app owner
   allowance_balance  Float                 @default(0) // Balance available for withdrawal
 }
@@ -58,12 +58,13 @@ model Phone_Confirmations {
   app_user App_Users @relation(fields: [app_user_id], references: [id])
 }
 
-model Service_Name {
+model Apps {
   id                String               @id @default(uuid())
   owner_id          String
   name              String               @unique
   description       String?
-  endpoint          String
+  endpoint          String?
+  app_key           String               @unique
   created_at        DateTime             @default(now())
   updated_at        DateTime             @default(now()) @updatedAt
   owner             App_Users            @relation(fields: [owner_id], references: [id])
@@ -81,7 +82,7 @@ model Subscription_Plans {
   created_at    DateTime @default(now())
   updated_at    DateTime @default(now()) @updatedAt
 
-  service      Service_Name             @relation(fields: [service_id], references: [id])
+  app          Apps                     @relation(fields: [service_id], references: [id])
   customerSubs Customer_Subscriptions[]
 }
 
@@ -122,7 +123,7 @@ model Customers {
   updated_at   DateTime                 @default(now()) @updatedAt
   customerSubs Customer_Subscriptions[]
 
-  app Service_Name @relation(fields: [app_id], references: [id])
+  app Apps @relation(fields: [app_id], references: [id])
 }
 
 model Revenue_Share {
@@ -137,7 +138,7 @@ model Revenue_Share {
   created_at     DateTime @default(now())
   updated_at     DateTime @default(now()) @updatedAt
 
-  serviceName Service_Name @relation(fields: [service_id], references: [id])
+  app Apps @relation(fields: [service_id], references: [id])
 }
 
 enum RoleName {

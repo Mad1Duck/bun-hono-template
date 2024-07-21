@@ -1,12 +1,12 @@
-import { createUser, getUser } from "../../services/auth.service";
-import { catchAsync } from "../../utils/catchAsync";
-import { loginSchemaType, registerSchemaType } from "../../utils/validator/auth.validator";
+import { createUser, getUser } from "../../../services/auth.service";
+import { catchAsync } from "../../../utils/catchAsync";
+import { loginSchemaType, registerSchemaType } from "../../../utils/validator/auth.validator";
 import { isEmpty } from "lodash";
-import { bcryptVerify } from "../../utils/hashing";
-import ApiError from "../../utils/ApiError";
+import { bcryptVerify } from "../../../utils/hashing";
+import ApiError from "../../../utils/ApiError";
 import * as HttpStatus from "http-status";
-import { generateToken } from "../../utils/jwt";
-import { findRole } from "../../services/role.service";
+import { generateToken } from "../../../utils/jwt";
+import { findRole } from "../../../services/role.service";
 
 // owner
 export const register = catchAsync(async (c) => {
