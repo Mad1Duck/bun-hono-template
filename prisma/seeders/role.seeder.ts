@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const seedRoles = async () => {
-  const adminRole = await prisma.roles.upsert({
+  const adminRole = await prisma.role.upsert({
     where: { name: 'ADMINISTRATOR' },
     update: {},
     create: {
@@ -12,11 +12,11 @@ export const seedRoles = async () => {
     },
   });
 
-  const appOwnerRole = await prisma.roles.upsert({
-    where: { name: 'APP_OWNER' },
+  const appOwnerRole = await prisma.role.upsert({
+    where: { name: 'USER' },
     update: {},
     create: {
-      name: 'APP_OWNER',
+      name: 'USER',
       description: 'App owner role with access to manage own apps',
     },
   });
