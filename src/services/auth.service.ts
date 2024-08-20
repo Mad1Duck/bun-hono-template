@@ -4,23 +4,22 @@ import { transformPhoneNumber } from "../utils/formater";
 import { bcryptHash } from "../utils/hashing";
 
 export const getUsers = () => {
-  return prisma.app_Users.findMany({
+  return prisma.user.findMany({
     select: {
       id: true,
-      created_at: true,
+      createdAt: true,
       email: true,
-      first_name: true,
-      last_name: true,
+      firstName: true,
+      lastName: true,
       phone: true,
-      birth_date: true,
-      role_id: true,
+      birthDate: true,
       username: true,
     }
   });
 };
 
 export const getUser = async ({ email, phone }: { email: string, phone: string; }) => {
-  return prisma.app_Users.findFirst({
+  return prisma.user.findFirst({
     where: {
       OR: [
         { email: { equals: email.toLowerCase() } },
@@ -30,34 +29,45 @@ export const getUser = async ({ email, phone }: { email: string, phone: string; 
     include: {
       roles: {
         select: {
-          name: true
+          role: {
+            select: {
+              name: true
+            }
+          }
         }
-      },
+      }
     }
   });
 };
 
 export const createUser = async (data: UserTypes) => {
-  return prisma.app_Users.create({
+  return prisma.user.create({
     data: {
       email: data.email!,
-      first_name: data.first_name,
-      last_name: data.last_name,
+      firstName: data.first_name,
+      lastName: data.last_name,
       password: await bcryptHash(data.password!),
       phone: await transformPhoneNumber(data.phone!),
       username: data.username!,
-      role_id: data.role_id!
     }
   });
 };
 
 export const getUserById = async (data: UserTypes) => {
-  return prisma.app_Users.findFirst({
+  return prisma.user.findFirst({
     where: {
       id: data.id!
     },
     include: {
-      roles: true
+      roles: {
+        select: {
+          role: {
+            select: {
+              name: true
+            }
+          }
+        }
+      }
     }
   });
 };
