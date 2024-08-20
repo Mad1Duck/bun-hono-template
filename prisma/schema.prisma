@@ -8,14 +8,13 @@ datasource db {
 }
 
 model User {
-  id                 String              @id @default(uuid())
+  id                 String              @id @default(uuid()) @db.Uuid
   username           String              @unique
   firstName          String?
   lastName           String?
   phone              String?
   email              String              @unique
   password           String
-  roleId             String              @db.Uuid
   birthDate          DateTime?
   createdAt          DateTime            @default(now())
   updatedAt          DateTime            @default(now()) @updatedAt
@@ -25,9 +24,9 @@ model User {
 }
 
 model TrUserRole {
-  id        String   @id @default(uuid())
-  roleId    String
-  userId    String
+  id        String   @id @default(uuid()) @db.Uuid
+  roleId    String   @db.Uuid
+  userId    String   @db.Uuid
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
   role      Role     @relation(fields: [roleId], references: [id])
@@ -44,8 +43,8 @@ model Role {
 }
 
 model EmailConfirmation {
-  id               String   @id @default(uuid())
-  userId           String
+  id               String   @id @default(uuid()) @db.Uuid
+  userId           String   @db.Uuid
   confirmationCode String   @unique
   isConfirmed      Boolean  @default(false)
   createdAt        DateTime @default(now())
@@ -55,8 +54,8 @@ model EmailConfirmation {
 }
 
 model PhoneConfirmation {
-  id         String   @id @default(uuid())
-  userId     String
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @db.Uuid
   otpCode    String
   isVerified Boolean  @default(false)
   createdAt  DateTime @default(now())
@@ -66,8 +65,7 @@ model PhoneConfirmation {
 }
 
 model SubscriptionPlan {
-  id           String   @id @default(uuid())
-  serviceId    String
+  id           String   @id @default(uuid()) @db.Uuid
   name         String
   price        Float
   billingCycle String
