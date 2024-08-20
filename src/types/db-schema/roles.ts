@@ -1,3 +1,3 @@
-import { Roles } from "@prisma/client";
+import { Role } from "@prisma/client";
 
-export type RolesTypes = Partial<Roles>;
+export type RoleTypes = Partial<Role>;

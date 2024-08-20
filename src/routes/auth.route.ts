@@ -6,7 +6,7 @@ import { login, register } from '../controllers/owners/auth/auth.controller';
 
 const app = new Hono();
 
-app.post('/owner/login', validate(loginSchema), login);
-app.post('/owner/register', validate(registerSchema), register);
+app.post('/login', validate(loginSchema), login);
+app.post('/register', validate(registerSchema), register);
 
 export default app;

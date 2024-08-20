@@ -41,15 +41,34 @@ export const getUser = async ({ email, phone }: { email: string, phone: string; 
 };
 
 export const createUser = async (data: UserTypes) => {
-  return prisma.user.create({
-    data: {
-      email: data.email!,
-      firstName: data.first_name,
-      lastName: data.last_name,
-      password: await bcryptHash(data.password!),
-      phone: await transformPhoneNumber(data.phone!),
-      username: data.username!,
-    }
+  return prisma.$transaction(async (tx) => {
+
+    const role = await tx.role.findFirst({
+      where: {
+        name: "USER"
+      }
+    });
+
+    const user = await tx.user.create({
+      data: {
+        email: data.email!,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        password: await bcryptHash(data.password!),
+        phone: await transformPhoneNumber(data.phone!),
+        username: data.username!,
+      }
+    });
+
+    await tx.trUserRole.create({
+      data: {
+        roleId: role?.id!,
+        userId: user?.id
+      }
+    });
+
+
+    return user;
   });
 };
 
