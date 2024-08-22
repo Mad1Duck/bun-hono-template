@@ -9,13 +9,16 @@
   "dependencies": {
     "@prisma/client": "^5.16.2",
     "@types/lodash": "^4.17.7",
-    "bullmq": "^5.12.9",
+    "@types/nodemailer": "^6.4.15",
+    "bullmq": "^5.12.10",
     "hono": "^4.4.13",
     "http-status": "^1.7.4",
+    "ioredis": "^5.4.1",
     "lodash": "^4.17.21",
     "midtrans-client": "^1.3.1",
     "nanoid": "^5.0.7",
     "nodemailer": "^6.9.14",
+    "uploadthing": "^6.13.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {

@@ -3,6 +3,7 @@ import { catchAsync } from "../../utils/catchAsync";
 import { registerSchemaType } from "../../utils/validator/auth.validator";
 import { join } from "path";
 import { writeFile } from "fs/promises";
+import { utapi } from "../../utils/uploadthing";
 
 
 export const upload = catchAsync(async (c) => {
@@ -15,8 +16,6 @@ export const upload = catchAsync(async (c) => {
 
     const filepath = join(publicPath, filename);
 
-    console.log(file);
-
     await writeFile(filepath, Buffer.from(buffer));
 
     return c.json({ data: publicPath, file: filename });
@@ -25,3 +24,14 @@ export const upload = catchAsync(async (c) => {
   return c.json({ data: publicPath });
 
 });
+
+
+export const uploadThing = catchAsync(async (c) => {
+  const { file }: any = await c.req.parseBody();
+  const response = await utapi.uploadFiles([file]);
+
+
+  return c.json({ data: response });
+
+});
+
