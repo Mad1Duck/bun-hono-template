@@ -11,6 +11,7 @@
     "@types/lodash": "^4.17.7",
     "@types/nodemailer": "^6.4.15",
     "bullmq": "^5.12.10",
+    "file-type": "^19.4.1",
     "hono": "^4.4.13",
     "http-status": "^1.7.4",
     "ioredis": "^5.4.1",
@@ -18,6 +19,7 @@
     "midtrans-client": "^1.3.1",
     "nanoid": "^5.0.7",
     "nodemailer": "^6.9.14",
+    "sharp": "^0.33.5",
     "uploadthing": "^6.13.2",
     "zod": "^3.23.8"
   },
