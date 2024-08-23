@@ -1,11 +1,10 @@
-import { isEmpty } from "lodash";
 import { catchAsync } from "../../utils/catchAsync";
 import *  as httpStatus from "http-status";
 import { join } from "path";
 import { writeFile } from "fs/promises";
 import { utapi } from "../../utils/uploadthing";
 import { toWebp } from "../../services/image.service";
-import { fileTypeFromBuffer } from "file-type";
+import { fileUtils } from "../../utils/fileUtils";
 
 
 export const upload = catchAsync(async (c) => {
@@ -13,22 +12,19 @@ export const upload = catchAsync(async (c) => {
   const publicPath = join(process.cwd(), 'public');
 
   if (file instanceof File) {
-    const filename = `${file.name}`;
     const buffer = await file?.arrayBuffer();
-    const convertedBuffer = await toWebp({ file: buffer });
+    const { convertedBuffer, type } = await toWebp({ file: buffer });
+    const { originalName } = fileUtils(file);
 
-    const originalName = file.name.split('.').slice(0, -1).join('.');
-    const type = await fileTypeFromBuffer(convertedBuffer);
     const newFilename = `${originalName}.${type?.ext}`;
-
     const filepath = join(publicPath, newFilename);
 
-    await writeFile(filepath, Buffer.from(buffer));
+    await writeFile(filepath, Buffer.from(convertedBuffer));
 
-    return c.json({ data: publicPath, file: filename });
+    return c.json({ data: filepath, file: originalName });
   }
 
-  return c.json({ data: publicPath });
+  return c.json({ data: {}, message: httpStatus["415_MESSAGE"] });
 
 });
 
@@ -40,9 +36,8 @@ export const uploadThing = catchAsync(async (c) => {
     const buffer = await file?.arrayBuffer();
 
     // convert to webp
-    const convertedBuffer = await toWebp({ file: buffer });
-    const type = await fileTypeFromBuffer(convertedBuffer);
-    const originalName = file.name.split('.').slice(0, -1).join('.');
+    const { convertedBuffer, type } = await toWebp({ file: buffer });
+    const { originalName } = fileUtils(file);
     const newFilename = `${originalName}.${type?.ext}`;
 
     const fileWithNewName = new File([convertedBuffer], newFilename, {
