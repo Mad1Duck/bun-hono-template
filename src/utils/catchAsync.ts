@@ -18,5 +18,3 @@ export const catchAsync = <T>(fn: (c: Context, next: Next) => T) => async (c: Co
     }
   }
 };
-
-const res = catchAsync(async (c) => c.json({ OK: 1 }));
