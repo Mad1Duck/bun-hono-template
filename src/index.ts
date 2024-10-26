@@ -11,12 +11,12 @@ import { join } from 'path';
 
 type Variables = JwtVariables;
 
-const app = new Hono<{ Variables: Variables; }>();
+const app = new Hono<{ Variables: Variables; }>()
 
 // Middleware
-app.use(logger());
-app.use('/api', timeout(5000));
-app.use(
+.use(logger())
+.use('/api', timeout(5000))
+.use(
   '/api/*',
   cors({
     origin: 'localhost',
@@ -26,24 +26,23 @@ app.use(
     maxAge: 600,
     credentials: true,
   })
-);
-app.use(
+)
+.use(
   '/auth/*',
   jwt({
     secret: 'it-is-very-secret',
     alg: 'HS256',
   })
-);
-
-app.use('/public/*', async (c) => {
+)
+.use('/public/*', async (c) => {
   const publicPath = join(process.cwd(), 'public');
 
   const filePath = join(publicPath, c.req.path.replace('/public/', ''));
   const file = Bun.file(filePath);
   return new Response(file);
-});
+})
 
-app.use('/file-data/*', serveStatic({
+.use('/file-data/*', serveStatic({
   root: './public',
   rewriteRequestPath: (path) => {
 
@@ -53,13 +52,15 @@ app.use('/file-data/*', serveStatic({
 
     return filePath;
   }
-}));
+}))
 
-app.route('/api', routes); // Ensure routes are correct and match
+.route('/api', routes) // Ensure routes are correct and match
 
-app.onError(errorHandler);
+.onError(errorHandler);
 
 export default {
   port: process.env.PORT || 8080,
   fetch: app.fetch,
-};
+}
+
+export type AppType = typeof app;

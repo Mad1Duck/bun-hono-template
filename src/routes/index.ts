@@ -4,10 +4,9 @@ import { Hono } from 'hono';
 import auth from './auth.route';
 import storage from './file.route';
 
-const app = new Hono();
-
-// owners
-app.route('/auth', auth);
-app.route('/storage', storage);
+const app = new Hono()
+    // owners
+    .route('/auth', auth)
+    .route('/storage', storage);
 
 export default app;
