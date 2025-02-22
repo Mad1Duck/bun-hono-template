@@ -6,7 +6,6 @@ import { utapi } from "@/utils/uploadthing";
 import { toWebp } from "@/services/image.service";
 import { fileUtils } from "@/utils/fileUtils";
 
-
 export const upload = catchAsync(async (c) => {
   const { file }: any = await c.req.parseBody();
   const publicPath = join(process.cwd(), 'public');
