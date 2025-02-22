@@ -1,11 +1,11 @@
-import { createUser, getUser } from "../../services/auth.service";
-import { catchAsync } from "../../utils/catchAsync";
-import { loginSchemaType, registerSchemaType } from "../../utils/validator/auth.validator";
+import { createUser, getUser } from "@/services/auth.service";
+import { catchAsync } from "@/utils/catchAsync";
+import { loginSchemaType, registerSchemaType } from "@/utils/validator/auth.validator";
 import { isEmpty } from "lodash";
-import { bcryptVerify } from "../../utils/hashing";
-import ApiError from "../../utils/ApiError";
+import { bcryptVerify } from "@/utils/hashing";
+import ApiError from "@/utils/ApiError";
 import * as HttpStatus from "http-status";
-import { generateToken } from "../../utils/jwt";
+import { generateToken } from "@/utils/jwt";
 
 // owner
 export const register = catchAsync(async (c) => {
@@ -23,7 +23,7 @@ export const login = catchAsync(async (c) => {
   const findUser = await getUser({ email: username, phone: username });
 
   if (isEmpty(findUser)) {
-    throw new ApiError(HttpStatus.UNAUTHORIZED, { message: "unauthorize" });
+    throw new ApiError(HttpStatus.default.UNAUTHORIZED, { message: "unauthorize" });
   } else {
     const verifiedPassword = await bcryptVerify(password, findUser.password);
     if (verifiedPassword) {
@@ -31,6 +31,6 @@ export const login = catchAsync(async (c) => {
       const token = await generateToken({ email, id });
       return c.json({ data: { firstName, lastName, email, roles, authoritation: { token: token } } });
     }
-    throw new ApiError(HttpStatus.UNAUTHORIZED, { message: "unauthorize" });
+    throw new ApiError(HttpStatus.default.UNAUTHORIZED, { message: "unauthorize" });
   }
 });

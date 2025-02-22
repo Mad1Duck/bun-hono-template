@@ -1,7 +1,7 @@
-import { prisma } from "../bin/database";
-import { UserTypes } from "../types/db-schema/users";
-import { transformPhoneNumber } from "../utils/formater";
-import { bcryptHash } from "../utils/hashing";
+import { prisma } from "@/bin/database";
+import { UserTypes } from "@/types/db-schema/users";
+import { transformPhoneNumber } from "@/utils/formater";
+import { bcryptHash } from "@/utils/hashing";
 
 export const getUsers = () => {
   return prisma.user.findMany({

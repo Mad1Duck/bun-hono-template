@@ -7,28 +7,28 @@
     "seed": "bun run prisma/seeders/seeds.ts"
   },
   "dependencies": {
-    "@prisma/client": "^5.16.2",
-    "@types/lodash": "^4.17.7",
-    "@types/nodemailer": "^6.4.15",
-    "bullmq": "^5.12.10",
-    "file-type": "^19.4.1",
-    "hono": "^4.4.13",
-    "http-status": "^1.7.4",
-    "ioredis": "^5.4.1",
+    "@prisma/client": "^6.4.1",
+    "@types/lodash": "^4.17.15",
+    "@types/nodemailer": "^6.4.17",
+    "bullmq": "^5.41.5",
+    "file-type": "^20.1.0",
+    "hono": "^4.7.2",
+    "http-status": "^2.1.0",
+    "ioredis": "^5.5.0",
     "lodash": "^4.17.21",
-    "midtrans-client": "^1.3.1",
-    "nanoid": "^5.0.7",
-    "nodemailer": "^6.9.14",
+    "midtrans-client": "^1.4.2",
+    "nanoid": "^5.1.0",
+    "nodemailer": "^6.10.0",
     "sharp": "^0.33.5",
-    "uploadthing": "^6.13.2",
-    "uuid": "^10.0.0",
-    "zod": "^3.23.8"
+    "uploadthing": "^7.5.2",
+    "uuid": "^11.1.0",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "@types/node": "^20.14.11",
-    "prisma": "^5.18.0",
+    "@types/node": "^22.13.5",
+    "prisma": "^6.4.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.3"
+    "typescript": "^5.7.3"
   }
 }

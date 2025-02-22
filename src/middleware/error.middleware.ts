@@ -2,8 +2,8 @@ import { Prisma } from "@prisma/client";
 import { Context, ErrorHandler } from "hono";
 import { HTTPResponseError } from "hono/types";
 import { HTTPException } from "hono/http-exception";
-import { StatusCode } from "hono/utils/http-status";
-import ApiError from "../utils/ApiError";
+import { ContentfulStatusCode } from "hono/utils/http-status";
+import ApiError from "@/utils/ApiError";
 
 const handlePrismaError = (error: Prisma.PrismaClientKnownRequestError) => {
 
@@ -27,7 +27,7 @@ const handlePrismaError = (error: Prisma.PrismaClientKnownRequestError) => {
   }
 };
 
-export const errorConverter = async (error: { statusCode: StatusCode; message: string; }) => {
+export const errorConverter = async (error: { statusCode: ContentfulStatusCode; message: string; }) => {
   let response: ApiError;
 
   if (error instanceof Prisma.PrismaClientKnownRequestError) {

@@ -1,10 +1,10 @@
-import { catchAsync } from "../../utils/catchAsync";
+import { catchAsync } from "@/utils/catchAsync";
 import *  as httpStatus from "http-status";
 import { join } from "path";
 import { writeFile } from "fs/promises";
-import { utapi } from "../../utils/uploadthing";
-import { toWebp } from "../../services/image.service";
-import { fileUtils } from "../../utils/fileUtils";
+import { utapi } from "@/utils/uploadthing";
+import { toWebp } from "@/services/image.service";
+import { fileUtils } from "@/utils/fileUtils";
 
 
 export const upload = catchAsync(async (c) => {
@@ -24,7 +24,7 @@ export const upload = catchAsync(async (c) => {
     return c.json({ data: filepath, file: originalName });
   }
 
-  return c.json({ data: {}, message: httpStatus["415_MESSAGE"] });
+  return c.json({ data: {}, message: httpStatus.default["415_MESSAGE"] });
 
 });
 
@@ -49,7 +49,7 @@ export const uploadThing = catchAsync(async (c) => {
 
     return c.json({ data: response });
   }
-  return c.json({ data: {}, message: httpStatus["415_MESSAGE"] });
+  return c.json({ data: {}, message: httpStatus.default["415_MESSAGE"] });
 
 });
 

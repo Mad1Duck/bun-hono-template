@@ -1,8 +1,8 @@
 import { jwt } from "hono/jwt";
-import { catchAsync } from "../utils/catchAsync";
-import { getUserById } from "../services/auth.service";
+import { catchAsync } from "@/utils/catchAsync";
+import { getUserById } from "@/services/auth.service";
 import { isEmpty } from "lodash";
-import ApiError from "../utils/ApiError";
+import ApiError from "@/utils/ApiError";
 import * as HttpStatus from "http-status";
 import * as _ from 'lodash';
 
@@ -20,7 +20,7 @@ export const authenticationUser = catchAsync(async (c, next) => {
   if (!isEmpty(findUser) && (_.find(findUser?.roles, (item) => item.role.name === "USER"))) {
     return await next();
   } else {
-    throw new ApiError(HttpStatus.UNAUTHORIZED, { message: "unauthorize" });
+    throw new ApiError(HttpStatus.default.UNAUTHORIZED, { message: "unauthorize" });
   }
 });
 
@@ -31,6 +31,6 @@ export const authenticationAdministrator = catchAsync(async (c, next) => {
   if (!isEmpty(findUser) && (_.find(findUser?.roles, (item) => item.role.name === "ADMINISTRATOR"))) {
     return await next();
   } else {
-    throw new ApiError(HttpStatus.UNAUTHORIZED, { message: "unauthorize" });
+    throw new ApiError(HttpStatus.default.UNAUTHORIZED, { message: "unauthorize" });
   }
 });

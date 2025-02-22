@@ -1,6 +1,6 @@
 import { Worker } from 'bullmq';
-import { redisConfig } from '../bin/config';
-import { sendEmail } from '../services/email.service';
+import { redisConfig } from '@/bin/config';
+import { sendEmail } from '@/services/email.service';
 
 export const emailWorker = new Worker('email-queue', async (job) => {
   const { to, ...data } = job.data;

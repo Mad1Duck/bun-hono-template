@@ -1,4 +1,4 @@
-import { StatusCode } from "hono/utils/http-status";
+import { ContentfulStatusCode } from "hono/utils/http-status";
 
 interface errorOptions {
   message: string,
@@ -7,11 +7,11 @@ interface errorOptions {
 }
 
 class ApiError extends Error {
-  statusCode: StatusCode;
+  statusCode: ContentfulStatusCode;
   isOperational: boolean;
 
   constructor(
-    statusCode: StatusCode,
+    statusCode: ContentfulStatusCode,
     options: errorOptions
   ) {
     super(options.message);

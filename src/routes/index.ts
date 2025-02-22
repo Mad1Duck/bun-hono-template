@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 
 // owners
-import auth from './auth.route';
-import storage from './file.route';
+import auth from '@/routes/auth.route';
+import storage from '@/routes/file.route';
 
 const app = new Hono()
     // owners

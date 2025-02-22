@@ -1,12 +1,15 @@
 {
   "compilerOptions": {
     "strict": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx",
-    "typeRoots": [
-      "./node_modules/@types",
-      "./types"
-    ],
+    "moduleResolution": "node",
+    "module": "ESNext",
+    "target": "ESNext",
     "esModuleInterop": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
   }
 }
